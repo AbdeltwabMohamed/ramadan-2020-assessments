@@ -1,6 +1,14 @@
+// "use strict";
+(() => {
+
+})();
+
+
+item = "HELL WORLD";
 function getSingleVid(element){
 
 
+  const VideoListEle=document.getElementById('listOfRequests');
 
 
 
@@ -14,16 +22,16 @@ const VideoRequestTemplate=`<div class="card mb-3">
               </p>
             </div>
             <div class="d-flex flex-column text-center">
-              <a class="btn btn-link">🔺</a>
-              <h3>${element.votes}</h3>
-              <a class="btn btn-link">🔻</a>
+              <a id="up${element._id}"class="btn btn-link">🔺</a>
+              <h3 id="vote${element._id}">${element.votes.ups - element.votes.downs}</h3>
+              <a id="down" class="btn btn-link">🔻</a>
             </div>
           </div>
           <div class="card-footer d-flex flex-row justify-content-between">
             <div>
-              <span class="text-info">${element.status}</span>
+              <span class="text-info">${element.status.toUpperCase()}</span>
               &bullet; added by <strong>${element.author_name}</strong> on
-              <strong>${element.submit_date}</strong>
+              <strong>${new Date(element.submit_date).toLocaleDateString()}</strong>
             </div>
             <div
               class="d-flex justify-content-center flex-column 408ml-auto mr-2"
@@ -37,16 +45,47 @@ const VideoRequestTemplate=`<div class="card mb-3">
           const VideoListContainer=document.createElement('div');
 
             VideoListContainer.innerHTML=VideoRequestTemplate;
+            VideoListEle.appendChild(VideoListContainer);
+            
 
-            return VideoListContainer
+              const up=document.getElementById(`up${element._id}`);
+              const votevalue=document.getElementById(`vote${element._id}`);
+              console.log('up is ',up)
+              const down=document.getElementById('down');
+              up.addEventListener("click" ,(e)=>{
+                
+                fetch('http://localhost:7777/video-request/vote',
+                {headers: {
+                  'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({id:element._id, vote_type:'ups'}),method:'PUT'})
+                .then((data)=>data.json()).then((data)=>{
+                  VideoListEle.removeChild();
+                  fetch('http://localhost:7777/video-request').then((blob)=>{ return blob.json()}).then((data)=>{
+                    console.log(data)
+                    data.forEach((element) => {
+                        console.log(element)
+                       
+                        getSingleVid(element)
+                       
+                    
+                    });
+                })
+                 
+                })
+              })
+            
+              return VideoListContainer
 
 }
+
 
 document.addEventListener('DOMContentLoaded',()=>{
     // make sure the dom is loaded but not image or css
 
     const myform=document.getElementById('MyVideoForm');
-    const VideoListContainer=document.createElement('div');
+   
+    
     const VideoListEle=document.getElementById('listOfRequests');
 
     fetch('http://localhost:7777/video-request').then((blob)=>{ return blob.json()}).then((data)=>{
@@ -54,7 +93,9 @@ document.addEventListener('DOMContentLoaded',()=>{
         data.forEach((element) => {
             console.log(element)
            
-            VideoListEle.appendChild(getSingleVid(element));
+            getSingleVid(element)
+           
+        
         });
     })
 
@@ -63,10 +104,12 @@ document.addEventListener('DOMContentLoaded',()=>{
       e.preventDefault();
       const myFormData=new FormData(myform); // MAKE object form  using mutipart by defualt
       fetch('http://localhost:7777/video-request' ,{method:'POST', body:myFormData}).then((res)=>{
-        
-      })
+        VideoListEle.prepend(getSingleVid(res));
 
     })
 
-
   })
+
+
+})
+
