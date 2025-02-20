@@ -8,6 +8,7 @@ module.exports = {
 
   getAllVideoRequests: (top) => {
     return VideoRequest.find({}).sort({ submit_date: '-1' }).limit(top);
+    
   },
 
   searchRequests: (topic) => {
@@ -42,7 +43,7 @@ module.exports = {
           [vote_type]: ++oldRequest.votes[vote_type],
           [other_type]: oldRequest.votes[other_type],
         },
-      }
+      },{new :true}
     );
   },
 
