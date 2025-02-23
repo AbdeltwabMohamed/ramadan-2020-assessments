@@ -63,12 +63,23 @@ document.addEventListener('DOMContentLoaded',()=>{
     
     const VideoListEle=document.getElementById('listOfRequests');
     const voteOptions=document.getElementById('voteOptions');
+    const SearchText= document.getElementById('searchText');
+  let orderBy='';
+  let Serach='';
+    SearchText.addEventListener('keyup',debouns((e=>{
+      Serach=e.target.value
+      getAll(orderBy,e.target.value)
+    }),300))
 
     voteOptions.addEventListener("change",(e)=>{
-      if(e.target.value=='top')
-        getAll('top')
-      else 
-      getAll('new')
+      if(e.target.value=='top'){
+        orderBy='top'
+        getAll('top',Serach)
+      }
+      else{
+orderBy='new'
+        getAll('new',Serach)
+      } 
 
     })
 
@@ -83,11 +94,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
       fetch('http://localhost:7777/video-request' ,{method:'POST', body:myFormData }).then(e=>e.json()).then((res)=>{
-        console.log(res)
         VideoListEle.prepend(getSingleVid(res));
         const up=document.getElementById(`up${res._id}`);
         const votevalue=document.getElementById(`vote${res._id}`);
-        console.log('up is ',up)
         const down=document.getElementById(`down${res._id}`);
         up.addEventListener("click" ,(e)=>{
           
@@ -128,20 +137,17 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 })
 
-function getAll(orderBy='new'){
+function getAll(orderBy='new',serach=''){
   const VideoListEle=document.getElementById('listOfRequests');
 
-  fetch('http://localhost:7777/video-request?orderBy='+orderBy).then((blob)=>{ return blob.json()}).then((data)=>{
+  fetch(`http://localhost:7777/video-request?orderBy=${orderBy}&search=${serach}`).then((blob)=>{ return blob.json()}).then((data)=>{
     VideoListEle.innerHTML = '';
-    console.log(data)
     data.forEach((element) => {
-        console.log(element)
 
         getSingleVid(element)
        
         const up=document.getElementById(`up${element._id}`);
         const votevalue=document.getElementById(`vote${element._id}`);
-        console.log('up is ',up)
         const down=document.getElementById(`down${element._id}`);
         up.addEventListener("click" ,(e)=>{
           
@@ -174,4 +180,13 @@ function getAll(orderBy='new'){
 })
 
 
+  }
+
+  function debouns (fn,time){
+   let timeout 
+    return function (...args){
+      console.log(args)
+      clearTimeout(timeout)
+      timeout=setTimeout(()=>fn.apply(this,args),time)
+    }
   }
