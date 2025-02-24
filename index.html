@@ -12,27 +12,37 @@
   <body>
     <div class="container my-5">
       <div class="formContainer my-5">
-        <form id="MyVideoForm">
+        <form id="MyVideoForm" novalidate>
           <div class="row">
             <div class="col-md">
               <div class="form-group">
                 <label for="author_name">Your name *</label>
                 <input
+                  required
                   class="form-control"
                   name="author_name"
+                  type="text"
+
                   placeholder="Write your name here"
                 />
+                <p class="invalid-feedback" >this filed is required</p>
               </div>
+
             </div>
             <div class="col-md">
               <div class="form-group">
                 <label for="author_email">Your email *</label>
                 <input
+                required
                   class="form-control"
-                  name="author_email"
+                  name="author_email" 
+                  maxlength="100"
+                  type="text"
                   placeholder="Write your email here"
                 />
+                <p class="invalid-feedback" >this filed is required</p>
               </div>
+
             </div>
           </div>
           <hr />
@@ -41,11 +51,16 @@
               <div class="form-group">
                 <label for="topic_title">Topic *</label>
                 <input
+                required
                   class="form-control"
                   name="topic_title"
+                  type="text"
+                  maxlength="100"
                   placeholder="Write your suggested topic here"
                 />
+                <p class="invalid-feedback" >this filed is required</p>
               </div>
+
             </div>
             <div class="col-md">
               <div class="form-group">
@@ -59,6 +74,7 @@
                   <option value="medium">Medium</option>
                   <option value="advanced">Advanced</option>
                 </select>
+                
               </div>
             </div>
           </div>
@@ -67,25 +83,30 @@
               <div class="form-group">
                 <label for="topic_details">More details *</label>
                 <textarea
+                required
                   class="form-control"
                   name="topic_details"
                   placeholder="Write your topic in more details here"
                 ></textarea>
+                <p class="invalid-feedback" >this filed is required</p>
+
               </div>
             </div>
             <div class="col-md">
-              <div class="form-group">
+              <div class="form-group ">
                 <label for="expected_result">Expected results</label>
                 <textarea
-                  class="form-control"
+                
+                  class="form-control "
                   name="expected_result"
                   placeholder="Write what do you expect after watching this video"
                 ></textarea>
+                <p class="invalid-feedback" >this filed is required</p>
               </div>
             </div>
           </div>
 
-          <button type="submit" class="btn btn-success mt-3">
+          <button type="button" id="submitButton" class="btn btn-success mt-3">
             Send video request
           </button>
         </form>
@@ -112,3 +133,15 @@
     </script>
   </body>
 </html>
+<style>
+  input:invalid {
+  box-shadow: none; /* Remove default red highlight */
+}
+
+input:invalid::-webkit-validation-bubble,
+input:invalid::-moz-validation-bubble,
+input:invalid::-ms-validation-bubble {
+  display: none !important; /* Hide tooltip */
+}
+
+</style>

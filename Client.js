@@ -60,10 +60,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     const myform=document.getElementById('MyVideoForm');
    
+
     
     const VideoListEle=document.getElementById('listOfRequests');
     const voteOptions=document.getElementById('voteOptions');
     const SearchText= document.getElementById('searchText');
+    const button= document.getElementById('submitButton');
   let orderBy='';
   let Serach='';
     SearchText.addEventListener('keyup',debouns((e=>{
@@ -86,12 +88,31 @@ orderBy='new'
 
     getAll()
 
-    myform.addEventListener('submit',(e)=>{
+    button.addEventListener('click',(e)=>{
       e.preventDefault();
-      const myFormData=new FormData(myform); // MAKE object form  using mutipart by defualt
+      const myFormData=new FormData(myform); 
+      let isValid=true;
+      
+      const elements = myform.querySelectorAll("[required]");
 
 
+for (let index = 0; index < elements.length; index++) {
+    let el = elements[index];
 
+    if (!el.reportValidity()) {
+        el.classList.add("is-invalid");
+      
+      } else {
+      
+        el.classList.remove("is-invalid");
+        return
+    }
+
+    // Check if it's the last iteration and break
+    if (index === elements.length - 1) {
+        console.log("in final");
+    }
+}
 
       fetch('http://localhost:7777/video-request' ,{method:'POST', body:myFormData }).then(e=>e.json()).then((res)=>{
         VideoListEle.prepend(getSingleVid(res));
