@@ -66,6 +66,33 @@ document.addEventListener('DOMContentLoaded',()=>{
     const voteOptions=document.getElementById('voteOptions');
     const SearchText= document.getElementById('searchText');
     const button= document.getElementById('submitButton');
+    const LoginForm=document.getElementById('LoginForm');
+    const Pagebody=document.getElementById('Pagebody');
+  if(window.location.search){
+    const userid=(new URLSearchParams(window.location.search).get('id'))
+    if(userid){
+      console.log('siasdljas')
+      Pagebody.classList.remove('d-none')
+      LoginForm.classList.add('d-none')
+    }
+  }
+
+    LoginForm.addEventListener('submit',(e)=>{
+      let myData=new FormData(LoginForm);
+      e.preventDefault();
+      fetch('http://localhost:7777/users/login',{method:'POST',body:myData}).then((data=>{
+        window.history.pushState({}, '', data.url);
+        LoginForm.classList.add("d-none");
+        Pagebody.classList.remove("d-none")
+        Pagebody.style.display = "block"; 
+        Pagebody.style.visibility = "visible"; 
+        Pagebody.style.opacity = "1"; 
+
+      }))
+    })
+
+
+
   let orderBy='';
   let Serach='';
     SearchText.addEventListener('keyup',debouns((e=>{
@@ -95,24 +122,37 @@ orderBy='new'
       
       const elements = myform.querySelectorAll("[required]");
 
-
+      let invalidCounter=0;
+      let firstInvalidElement=null
 for (let index = 0; index < elements.length; index++) {
+  
     let el = elements[index];
+    console.log('sss',el.value)
 
-    if (!el.reportValidity()) {
+    if (el.value==='') {
+      invalidCounter++;
         el.classList.add("is-invalid");
-      
-      } else {
-      
-        el.classList.remove("is-invalid");
-        return
-    }
+       
+        if(!firstInvalidElement)
+          firstInvalidElement=el;
+      } 
+
+      el.addEventListener("input",(e)=>{
+        el.classList.remove('is-invalid')
+      })
 
     // Check if it's the last iteration and break
     if (index === elements.length - 1) {
-        console.log("in final");
+
+      if (firstInvalidElement) {
+        firstInvalidElement.focus();
+    }
+    firstInvalidElement=null
+       
     }
 }
+
+  if(invalidCounter=== - elements.length)
 
       fetch('http://localhost:7777/video-request' ,{method:'POST', body:myFormData }).then(e=>e.json()).then((res)=>{
         VideoListEle.prepend(getSingleVid(res));
@@ -151,6 +191,8 @@ for (let index = 0; index < elements.length; index++) {
       
            
     })
+
+    invalidCounter=0
     
 
   })

@@ -4,13 +4,88 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Semicolon | video request</title>
+    <style>
+input:invalid {
+  box-shadow: none;
+  outline: none;
+}
+
+/* Hide tooltips in WebKit browsers (Chrome, Safari) */
+input:invalid:-webkit-autofill,
+input:invalid::-webkit-validation-bubble-message,
+input:invalid::-webkit-validation-bubble {
+  display: none !important;
+}
+
+/* Hide tooltips in Firefox */
+input:invalid:-moz-ui-invalid {
+  box-shadow: none !important;
+}
+
+/* Hide tooltips in Edge */
+input:invalid::-ms-tooltip {
+  display: none !important;
+}
+
+      
+      </style>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
   </head>
   <body>
-    <div class="container my-5">
+    <form  id="LoginForm" >
+
+      <div class="pt-5">
+        
+        <div class="row justify-content-center ">
+          <div class="col-md-2">
+            <div class="form-group">
+            <label for="topic_title">UserName *</label>
+            <input
+            required
+            class="form-control"
+            name="UserName"
+            type="text"
+            maxlength="100"
+            placeholder="UserName"
+            />
+            <p class="invalid-feedback" >this filed is required</p>
+          </div>
+          
+      </div>
+    </div>
+    <div class="pt-3">
+      
+      <div class="row justify-content-center ">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label for="topic_title">Email *</label>
+            <input
+          required
+          class="form-control"
+          name="author_email"
+          type="text"
+          maxlength="100"
+          placeholder="Email"
+          />
+          <p class="invalid-feedback" >this filed is required</p>
+        </div>
+        
+      </div>
+    </div>
+    <div class="pt-3">
+
+      <div class="row justify-content-center ">
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary w-100" >Login</button>
+          
+        </div>
+      </div>
+  </form>
+
+    <div id="Pagebody" class="container  my-5 d-none">
       <div class="formContainer my-5">
         <form id="MyVideoForm" novalidate>
           <div class="row">
@@ -106,7 +181,7 @@
             </div>
           </div>
 
-          <button type="button" id="submitButton" class="btn btn-success mt-3">
+          <button type="submit" id="submitButton" class="btn btn-success mt-3">
             Send video request
           </button>
         </form>
@@ -127,21 +202,10 @@
         </div>
       </div>
     </div>
+    
     <script src="/Client.js">
       
 
     </script>
   </body>
 </html>
-<style>
-  input:invalid {
-  box-shadow: none; /* Remove default red highlight */
-}
-
-input:invalid::-webkit-validation-bubble,
-input:invalid::-moz-validation-bubble,
-input:invalid::-ms-validation-bubble {
-  display: none !important; /* Hide tooltip */
-}
-
-</style>

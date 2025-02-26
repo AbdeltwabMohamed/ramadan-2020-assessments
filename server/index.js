@@ -38,9 +38,8 @@ app.get('/video-request', async (req, res, next) => {
 
 if(search!='' && search!=null&& search!=undefined){
   data=data.filter((e=>e.topic_title.includes(search)))
-console.log('sssssssssss',search)
 }
-console.log('sssssssssss',search)
+
 
   res.send(data);
   next();
@@ -52,9 +51,12 @@ app.get('/users', async (req, res, next) => {
   next();
 });
 
-app.post('/users/login', async (req, res, next) => {
+app.post('/users/login',upload.none(), async (req, res, next) => {
+  debugger
+  console.log(req.body.author_email)
   const response = await UserData.createUser(req.body);
   res.redirect(`http://localhost:5500?id=${response._id}`);
+  // console.log('response',response.)
   next();
 });
 
