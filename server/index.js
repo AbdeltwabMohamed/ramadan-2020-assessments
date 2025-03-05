@@ -56,16 +56,18 @@ app.post('/users/login',upload.none(), async (req, res, next) => {
   console.log(req.body.author_email)
   const response = await UserData.createUser(req.body);
   res.redirect(`http://localhost:5500?id=${response._id}`);
-  // console.log('response',response.)
+
   next();
 });
 
 app.use(express.json());
 
 app.put('/video-request/vote', async (req, res, next) => {
-  console.log('boddyyyyy',req)
-  const { id, vote_type } = req.body;
-  const response = await VideoRequestData.updateVoteForRequest(id, vote_type);
+  console.log('boddyyyyy',req.body)
+  const { id, vote_type,userid } = req.body;
+
+
+  const response = await VideoRequestData.updateVoteForRequest(id, vote_type,userid);
   res.send(response);
   next();
 });

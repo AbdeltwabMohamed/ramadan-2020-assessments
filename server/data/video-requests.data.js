@@ -33,14 +33,23 @@ module.exports = {
     return VideoRequest.findByIdAndUpdate(id, updates, { new: true });
   },
 
-  updateVoteForRequest: async (id, vote_type) => {
+  updateVoteForRequest: async (id, vote_type,userid) => {
     const oldRequest = await VideoRequest.findById({ _id: id });
     const other_type = vote_type === 'ups' ? 'downs' : 'ups';
+
+   
+    if(oldRequest.votes[vote_type].includes(userid)){
+      return {message:"you have already voted"}
+    }
+    // if(oldRequest.votes[other_type].includes(userid)){
+    //  oldRequest.votes[other_type].splice(oldRequest.votes[other_type].indexOf(userid),1)
+    // }
+    oldRequest.votes[vote_type].push(userid);
     return VideoRequest.findByIdAndUpdate(
       { _id: id },
       {
         votes: {
-          [vote_type]: ++oldRequest.votes[vote_type],
+          [vote_type]: oldRequest.votes[vote_type],
           [other_type]: oldRequest.votes[other_type],
         },
       },{new :true}
